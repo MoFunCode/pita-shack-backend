@@ -1,32 +1,56 @@
 package com.pitashack.restaurant.model;
 
-//Fields you need:
-//        - id (Long) - primary key
-//- name (String) - dish name
-//- description (String) - full description
-//- price (BigDecimal) - price (use BigDecimal for money!)
-//- category (String) - "plates", "wraps", "appetizers", etc.
-//- imageUrl (String) - link to photo
-//- isAvailable (Boolean) - is it in stock?
-//        - badge (String) - "Chef's Special", "Fan Favorite", null
-//        - createdAt (LocalDateTime) - when created
-//- updatedAt (LocalDateTime) - when last updated
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Entity  // ← CRITICAL: Tells Spring this is a database table
+@Table(name = "menu_items")  // ← Table name in database
+@Data  // ← Generates getters, setters, toString, equals, hashCode
+@NoArgsConstructor  // ← Empty constructor
+@AllArgsConstructor  // ← Constructor with all fields
 public class MenuItem {
-    Long id;
-    String name;
-    String description;
-    BigDecimal price; //price (use BigDecimal for money!)
-    String category; //"plates", "wraps", "appetizers", etc.
-    String imageUrl; // link to photo
-    Boolean isAvailable; //  is it in stock?
-    String badge; // "Chef's Special", "Fan Favorite", null
-    LocalDateTime createdAt; // when created
-    LocalDateTime updatedAt; // when updated
 
+    @Id  // ← Primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // ← Auto-increment
+    private Long id;
 
+    @Column(nullable = false)  // ← Cannot be null
+    private String name;
 
+    @Column(length = 500)  // ← Max 500 characters
+    private String description;
+
+    @Column(nullable = false, precision = 10, scale = 2)  // ← Required, max 99999999.99
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    private String category;
+
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private Boolean isAvailable = true;  // ← Default value
+
+    private String badge;
+
+    @Column(updatable = false)  // ← Never changes after creation
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist  // ← Runs BEFORE first save
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate  // ← Runs BEFORE every update
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
