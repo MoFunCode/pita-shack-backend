@@ -9,9 +9,7 @@ import java.util.List;
 
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
+    List<MenuItem> findByCategory(String category);
     List<MenuItem> findByCategoryAndIsAvailableTrue(String category);
-
-// - Add method: findByCategory(String category)
-//- Add method: findByIsAvailableTrue()
-
+    List<MenuItem> findByIsAvailableTrue();
 }

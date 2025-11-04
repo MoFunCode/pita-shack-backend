@@ -1,5 +1,6 @@
 package com.pitashack.restaurant.service;
 
+import com.pitashack.restaurant.exception.ResourceNotFoundException;
 import com.pitashack.restaurant.model.MenuItem;
 import com.pitashack.restaurant.repository.MenuItemRepository;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class MenuItemService {
     // Read by ID
     public MenuItem getMenuItemById(Long id) {
         return menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Menu item with id " + id + " not found"));
     }
 
     // Create
@@ -39,7 +40,7 @@ public class MenuItemService {
     // Update
     public MenuItem updateMenuItem(Long id, MenuItem updatedItem) {
         MenuItem existingItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Menu item with id " + id + " not found"));
 
         existingItem.setName(updatedItem.getName());
         existingItem.setDescription(updatedItem.getDescription());
@@ -54,6 +55,9 @@ public class MenuItemService {
 
     // Delete
     public void deleteMenuItem(Long id) {
+        if (!menuItemRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Menu item with id " + id + " not found");
+        }
         menuItemRepository.deleteById(id);
     }
 }
