@@ -1,6 +1,10 @@
 package com.pitashack.restaurant.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +23,18 @@ public class MenuItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // ← Auto-increment
     private Long id;
 
-    @Column(nullable = false)  // ← Cannot be null
+    @Column(nullable = false)
+    @NotBlank(message = "Name cannot be empty")// ← Cannot be null
+    @Size(min = 2, max = 100, message = "Name must be between 1-100 characters")
     private String name;
 
-    @Column(length = 500)  // ← Max 500 characters
+    @Column(length = 500)
+    @Size(max = 500)// ← Max 500 characters
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)  // ← Required, max 99999999.99
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.01", message = "Price must be greater than 0")
     private BigDecimal price;
 
     @Column(nullable = false)
