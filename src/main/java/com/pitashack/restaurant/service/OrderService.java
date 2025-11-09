@@ -25,14 +25,16 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final MenuItemRepository menuItemRepository;
+    private final EmailService emailService;
 
     private static final BigDecimal TAX_RATE = new BigDecimal("0.08"); // 8% tax
     private static final BigDecimal DELIVERY_FEE = new BigDecimal("5.00");
     private static final BigDecimal FREE_DELIVERY_THRESHOLD = new BigDecimal("50.00");
 
-    public OrderService(OrderRepository orderRepository, MenuItemRepository menuItemRepository) {
+    public OrderService(OrderRepository orderRepository, MenuItemRepository menuItemRepository, EmailService emailService) {
         this.orderRepository = orderRepository;
         this.menuItemRepository = menuItemRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -111,6 +113,10 @@ public class OrderService {
 
         // Save order (cascade will save order items)
         Order savedOrder = orderRepository.save(order);
+
+        // Send email notifications
+        emailService.sendOrderConfirmation(savedOrder);
+        emailService.sendNewOrderNotification(savedOrder);
 
         // Return response
         return new OrderResponse(
