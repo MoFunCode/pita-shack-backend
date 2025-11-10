@@ -192,7 +192,7 @@ All sensitive config (email credentials, database passwords) uses environment va
 
 Want to see this in action? Here's a quick walkthrough I sent to my friend showing the latest features:
 
-**[Video Demo Link - Add your link here]**
+**[Video Demo Link - https://youtu.be/OUMuEKMD4NQ]**
 
 ## Why This Project Matters
 
