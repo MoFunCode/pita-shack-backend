@@ -26,7 +26,7 @@ public class MenuItemController {
 
     @GetMapping("/category/{category}")
     public ResponseEntity<List<MenuItem>> getMenuItemsByCategory(@PathVariable String category) {
-        return ResponseEntity.ok(menuItemService.getMenuItemsByCategory(category));
+        return ResponseEntity.ok(menuItemService.getMenuItemsByCategory (category));
     }
 
     @GetMapping("/{id}")
