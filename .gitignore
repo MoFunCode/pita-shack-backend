@@ -50,6 +50,9 @@ Thumbs.db
 # Application properties with sensitive data
 application-prod.properties
 
+# Environment variables (never commit this file!)
+.env
+
 # Logs
 *.log
 
